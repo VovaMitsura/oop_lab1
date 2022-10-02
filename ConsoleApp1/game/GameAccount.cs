@@ -2,7 +2,7 @@
 
 public class GameAccount
 {
-     public static decimal TotalGameCount;
+    public static decimal TotalGameCount;
     public string UserName { get; set; }
     public short CurrentRating { get; set; }
     private List<Game> gameList;
