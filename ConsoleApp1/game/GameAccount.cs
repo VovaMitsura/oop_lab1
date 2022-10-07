@@ -3,6 +3,7 @@
 public class GameAccount
 {
     public static decimal TotalGameCount;
+    private const string ExceptionMessageNegativeBidRating = "Bid rate cannot be negative";
     public string UserName { get; set; }
     public short CurrentRating { get; set; }
     private List<Game> _gameList;
@@ -10,17 +11,17 @@ public class GameAccount
     public GameAccount(string userName, short currentRating)
     {
         UserName = userName;
-        CurrentRating = currentRating;
+        this.CurrentRating = (short)(IsValidRate(currentRating) ? currentRating : 1);
         _gameList = new List<Game>();
+    }
+
+    private Boolean IsValidRate(short rating)
+    {
+        return rating > 0 && rating < 32767;
     }
 
     private void WinGame(string opponentName, short rating)
     {
-        if (rating <= 0)
-        {
-            throw new ArgumentException(nameof(rating), "Rating cannot be lower 1");
-        }
-
         if (CurrentRating + 1 < 32767)
         {
             this.CurrentRating++;
@@ -33,11 +34,6 @@ public class GameAccount
 
     private void LoseGame(string opponentName, short rating)
     {
-        if (rating <= 0)
-        {
-            throw new ArgumentException(nameof(rating), "Rating cannot be lower 1");
-        }
-
         if (CurrentRating - rating > 0)
         {
             this.CurrentRating -= rating;
@@ -52,7 +48,7 @@ public class GameAccount
     {
         if (bidRate < 0)
         {
-            throw new ArgumentException(nameof(bidRate), "Bid rate cannot be negative");
+            throw new ArgumentException(ExceptionMessageNegativeBidRating, nameof(bidRate));
         }
 
         var firstUserCloseToWin = Math.Abs(this.CurrentRating - bidRate);
@@ -69,7 +65,7 @@ public class GameAccount
         else
         {
             Random random = new Random();
-            var winner = (int)random.NextInt64(0, 2);
+            var winner = random.NextInt64(0, 2);
 
             if (winner == 0)
             {
