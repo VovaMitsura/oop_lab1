@@ -1,4 +1,4 @@
-﻿namespace ConsoleApp1;
+﻿namespace ConsoleApp1.game;
 
 public class GameAccount
 {
@@ -41,7 +41,7 @@ public class GameAccount
         else
             this.CurrentRating = 1;
 
-        _gameList.Add(new Game(opponentName, UserName, rating));
+        _gameList.Add(new Game(opponentName, this.UserName, rating));
     }
 
     public void Play(GameAccount secondOpponent, short bidRate)
